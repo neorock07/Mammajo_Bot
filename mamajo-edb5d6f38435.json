@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "mamajo",
+  "private_key_id": "edb5d6f38435e9ca77b45b339f32d896c26f3d80",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEGtzQmXu+XDdS\nHGr6MdADtAWVJmJk4zaMW1QJCT+DvxUSWLZnaeuZvawAEOcjTKEM+07kSSEUAluR\nTVKil0kgY611EfZ42q9DVOblaTRayRJzfZTbEEh2mSDTmyU7pJtNIz0HWtxPrvL5\nsjU1nKq7RcMD3sq1+0j81ZO8U6FPdWlWBBj0Fsfrz0Ri0erjzY7Xs0SIID4aCksA\n5Wl3eEMlwR9ygHrcwCa6lg/ixIizj9QPHldD9+KJFiKvn44f2YVweN2gSgfVdpzR\ncoPxgq9RgsG0lF/QF+iG9Q77iRHKUIg60WWG0H74i4JRmrrgbkGnqsCOVQTX/UK5\n6+FA5JORAgMBAAECggEAErQ4MuossAWWHi4JMwdMvomtTaI9WL+GHKF6VKlN5kgz\nn44YCamD1+RMEy6JiSeeJcGTbvkdn02xQ5zTIKBa0GzJZsTZlAHRnROsOR3NaUpL\nyPmlmLZHHw6wX5Zo2PU0fck6YSj0oeH/GTs60Xv5mcaH2ObnQS+wMLNDNb9pP415\nynlHNLjcoDsSyJcd7AlxQqbjtWtvzlbtbbBRUszlAL5t82LX1NvPu6eqgYg5aHzk\nTVzdVHKMMnuHQJZ6UNof+gPqi5WGn14xhr16OVboK6sWgcdQE5pBR3w1ArJVFiM4\ntimeDiZVjdsK+oqFil3hTl1SkeOxGYC1FWzfdnAhlQKBgQDgunvJ74K4QWims7wQ\nD01RsDZ3XtlJcDLloi0iE4Yjcnz27qqbbFlvTKMaBX/XoPCpBaos79r2JnA1ZaS1\nZ/40P2tuvg0Cpzdpw+rpFMeT3zsDbNALttpOesqX77rv5iX9/2Qoxii3I+J7lRit\nAhGfCQRTK69iC9Z5lLqgU5TjjQKBgQDfZLizMarJiVeInbbZRxlL3Q5E89Mn/UR/\n5NZxGSxhWHi59Dwg9X06UsTuN9TA7yRxzqANEuhCa6YnHOD/YwKr+RobM8bq9Alo\nxKZk9mzCfSdKGKKOhkUckmBSNgFwAQwgcyxv/JZjBbCUPjPY21g8WEi0Slb2Ly22\nvaOlUM7NFQKBgE6cTSMVWkez8bSmmLmRcL2Lg3H8RsvuqI81TM5nv/t0WAxU7m8R\n1rMdPsyicdbu4GBvr9iqSpDiX0v+c0BV0VFbgewqJQjxj2u68dh4wVuTseP/00LV\nwsXDJE1DucOjYVTZWqL8tk9iCR6ryAb0+08Da3Tgiigk9fBvu1zMAAAdAoGANWWM\n5IA9s3iZrLUODLd663BGReMGGOvn4K4hN91th0MvcDtZ2AL10OgR3GMJ/qfqzS03\ngoh/bcjvaS/08/aFn/el7tScenKkgR9oKn/glUh3CLYEvQ6JHIA8d8oi49PMQ0Fk\nYMw+YiLtBzIrEG21lI8Bqd6PFL9ILQL9R7meBNUCgYEAtBJjp6ZbypEA2luPMPgo\nE0/9zLSVORe7QSbi72F1YSbRApbOdcji1mbxo+xfLaR6jTk34x9nbYmfS0Fry/FF\n+jHpeqXIdTQBVo3TqumTYVLGr4FiF8g7zoCzfXEVXXlR6VnGOvGA8aUH31KL6ISP\n6hEt+8UgMHxhL+iSBGVi/7w=\n-----END PRIVATE KEY-----\n",
+  "client_email": "mamajo-sheets@mamajo.iam.gserviceaccount.com",
+  "client_id": "107147012950147002740",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mamajo-sheets%40mamajo.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
