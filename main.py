@@ -12,7 +12,7 @@ from telebot.types import KeyboardButton
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # define the scope
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
@@ -27,13 +27,13 @@ sheet2 = client.open("data_mamajo_bot").worksheet('Sheet2')
 sheet3 = client.open("data_mamajo_bot").worksheet('Sheet5')
 sheet4 = client.open("data_mamajo_bot").worksheet('Sheet4')
 
-@app.route("/webhook", methods=["POST"])
-def webhook():
-    update = telebot.types.Update.de_json(
-        request.stream.read().decode('utf-8')
-    )
-    bot.process_new_updates([update])
-    return 'OK', 200
+# @app.route("/webhook", methods=["POST"])
+# def webhook():
+#     update = telebot.types.Update.de_json(
+#         request.stream.read().decode('utf-8')
+#     )
+#     bot.process_new_updates([update])
+#     return 'OK', 200
 
 def main_menu():
     markup = InlineKeyboardMarkup()
@@ -304,7 +304,8 @@ def owner_command(msg):
         
 # bot.infinity_polling()   
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get('PORT', 5000))
-    )        
+    bot.polling(non_stop=True)
+    # app.run(
+    #     host="0.0.0.0",
+    #     port=int(os.environ.get('PORT', 5000))
+    # )        
