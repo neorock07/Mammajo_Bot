@@ -301,7 +301,11 @@ def owner_command(msg):
         bot.send_message(chat_id_neo, "Baiklah , Anda telah membatalkan pesanan")    
     else:
         print("Tidak dapat berbicara")    
-        
+
+bot.remove_webhook()
+bot.set_webhook(url=f'https://mamajo-try-bot.osc-fr1.scalingo.io/webhook')
+
+
 if __name__ == "__main__":
     # bot.polling(non_stop=True)
     app.run(
