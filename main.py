@@ -38,12 +38,12 @@ def webhook():
         request.stream.read().decode('utf-8')
     )
     bot.process_new_updates([update])
+    global data
+    data = getAllData()
     return 'OK', 200
 
 
 def main_menu():
-    global data
-    data = getAllData()
     markup = InlineKeyboardMarkup()
     markup.row_width = 2
     markup.add(
