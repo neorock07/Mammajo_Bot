@@ -13,7 +13,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
-
+global data
 # define the scope
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 
@@ -27,6 +27,10 @@ sheet2 = client.open("data_mamajo_bot").worksheet('Sheet2')
 sheet3 = client.open("data_mamajo_bot").worksheet('Sheet5')
 sheet4 = client.open("data_mamajo_bot").worksheet('Sheet4')
 
+def getAllData():
+    rec_data = sheet.get_all_records()
+    return rec_data
+
 @app.route("/webhook", methods=["POST"])
 def webhook():
     update = telebot.types.Update.de_json(
@@ -35,7 +39,10 @@ def webhook():
     bot.process_new_updates([update])
     return 'OK', 200
 
+
 def main_menu():
+    global data
+    data = getAllData()
     markup = InlineKeyboardMarkup()
     markup.row_width = 2
     markup.add(
@@ -46,7 +53,7 @@ def main_menu():
     )
     return markup
 
-data = sheet.get_all_records()
+
 txt_menu = ""
 item = []
 index = 1
@@ -62,6 +69,8 @@ for i in data:
 
     index += 1
 print(txt_menu)    
+
+
 
 @bot.callback_query_handler(func= lambda msg : msg.data == "promo" )
 def show_promo(msg):    
@@ -81,10 +90,12 @@ def show_promo(msg):
 
 @bot.message_handler(commands=["start"])
 def show_main(message):
+    getAllData()
     first_name = message.chat.first_name
     last_name = message.chat.last_name
     bot.reply_to(message, "Hi, {} {}\nHarap membaca setiap instruksi dengan seksama ya!".format(first_name, last_name))
     bot.send_message(message.chat.id,"Silahkan pilih salah satu perintah!" ,reply_markup=main_menu())
+    
     
 @bot.callback_query_handler(func= lambda msg: msg.data == "myalamat")
 def show_lokasi(msg):
