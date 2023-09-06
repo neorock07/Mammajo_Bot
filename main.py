@@ -27,13 +27,13 @@ sheet2 = client.open("data_mamajo_bot").worksheet('Sheet2')
 sheet3 = client.open("data_mamajo_bot").worksheet('Sheet5')
 sheet4 = client.open("data_mamajo_bot").worksheet('Sheet4')
 
-# @app.route("/webhook", methods=["POST"])
-# def webhook():
-#     update = telebot.types.Update.de_json(
-#         request.stream.read().decode('utf-8')
-#     )
-#     bot.process_new_updates([update])
-#     return 'OK', 200
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    update = telebot.types.Update.de_json(
+        request.stream.read().decode('utf-8')
+    )
+    bot.process_new_updates([update])
+    return 'OK', 200
 
 def main_menu():
     markup = InlineKeyboardMarkup()
@@ -308,4 +308,4 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=int(os.environ.get('PORT', 5000))
     )        
-    bot.infinity_polling()   
+    # bot.infinity_polling()   
