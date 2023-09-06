@@ -8,23 +8,31 @@ from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMarkup,KeyboardButtonPollType
 from telebot.types import KeyboardButton
+import schedule, time
+import threading
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
-# define the scope
-scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 
-# add credentials to the account
-creds = ServiceAccountCredentials.from_json_keyfile_name('mamajo-edb5d6f38435.json', scope)
+sheet = ''
+sheet2 = ''
+sheet3 = ''
+sheet4 = ''
 
-# authorize the clientsheet 
-client = gspread.authorize(creds)
-sheet = client.open("data_mamajo_bot").sheet1
-sheet2 = client.open("data_mamajo_bot").worksheet('Sheet2')
-sheet3 = client.open("data_mamajo_bot").worksheet('Sheet5')
-sheet4 = client.open("data_mamajo_bot").worksheet('Sheet4')
+def connect_spreadsheet():
+    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+    creds = ServiceAccountCredentials.from_json_keyfile_name('mamajo-edb5d6f38435.json', scope)
+     
+    client = gspread.authorize(creds)
+    global sheet, sheet2, sheet3, sheet4
+    sheet = client.open("data_mamajo_bot").sheet1
+    sheet2 = client.open("data_mamajo_bot").worksheet('Sheet2')
+    sheet3 = client.open("data_mamajo_bot").worksheet('Sheet5')
+    sheet4 = client.open("data_mamajo_bot").worksheet('Sheet4')
+
+connect_spreadsheet()
 
 def getAllData():
     rec_data = sheet.get_all_records()
@@ -313,14 +321,26 @@ def owner_command(msg):
     else:
         print("Tidak dapat berbicara")    
 
-bot.remove_webhook()
-bot.set_webhook(url=f'https://mamajo-try-bot.osc-fr1.scalingo.io/webhook')
 
 
 if __name__ == "__main__":
+    
+    schedule.every(1).hours.do(connect_spreadsheet)
+    bot.remove_webhook()
+    bot.set_webhook(url=f'https://mamajo-try-bot.osc-fr1.scalingo.io/webhook')
+
     # bot.polling(non_stop=True)
+    def run_schedule():
+        schedule.run_pending()
+        time.sleep(1)
+    
+    thread_jadwal = threading.Thread(target=run_schedule)
+    thread_jadwal.start()
+        
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get('PORT', 5000))
-    )        
+    )
+    
+        
     # bot.infinity_polling()   
