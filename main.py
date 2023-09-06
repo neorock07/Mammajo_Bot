@@ -12,7 +12,7 @@ from telebot.types import KeyboardButton
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
-# app = Flask(__name__)
+app = Flask(__name__)
 
 # define the scope
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
