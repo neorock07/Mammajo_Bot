@@ -302,10 +302,10 @@ def owner_command(msg):
     else:
         print("Tidak dapat berbicara")    
         
-# bot.infinity_polling()   
 if __name__ == "__main__":
-    bot.polling(non_stop=True)
-    # app.run(
-    #     host="0.0.0.0",
-    #     port=int(os.environ.get('PORT', 5000))
-    # )        
+    # bot.polling(non_stop=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get('PORT', 5000))
+    )        
+    bot.infinity_polling()   
