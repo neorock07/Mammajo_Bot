@@ -188,23 +188,7 @@ def user_feedback(msg):
     status_msg[msg.message.chat.id] = "waiting"
     bot.send_message(msg.message.chat.id, "Kami bersedia menerima saran dan ulasan Anda demi kemajuan kualitas pelayanan kami\nSilahkan kirimkan ulasan Anda")
     
-@bot.message_handler(func=lambda query: True)
-def ulasan_user(query):
-    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
-        sheet4.append_row([query.text])
-        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
-        status_msg[query.chat.id] = "done"
-    elif "/alm" not in query.text:
-        respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-        ]
-        acak = random.randint(0, 3)
-        bot.reply_to(query, respon[acak])    
-            
-        
+                    
 @bot.message_handler(func=lambda query: '/alm' in query.text )
 def save_alamat(query):
     global buy_what
@@ -230,6 +214,23 @@ def save_kontak(msg):
         buy_what.append(nomer)
         bot.reply_to(msg, "Ok, nomor Anda sudah kami simpan!")
         bot.send_message(msg.chat.id, "Apakah ada catatan untuk pesanan ini ?\njika tidak ketik `/t`, jika ya awali dengan `/nt` untuk membalas.\ncontoh : <b>/nt gulanya sedikit saja.</b>", parse_mode="HTML")
+
+@bot.message_handler(func=lambda query: True)
+def ulasan_user(query):
+    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
+        sheet4.append_row([query.text])
+        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
+        status_msg[query.chat.id] = "done"
+    elif "/alm" not in query.text:
+        respon = [
+        "Maaf kami tidak dapat mengikuti instruksi ini.",
+        "Kami tidak melayani permintaan ini",
+        "Saya tidak tahu maksud Anda",
+        "Harap memberikan instruksi sesuai petunjuk ya"
+        ]
+        acak = random.randint(0, 3)
+        bot.reply_to(query, respon[acak])    
+
 
 def markup_order():
     markup = InlineKeyboardMarkup(
