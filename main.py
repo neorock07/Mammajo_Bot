@@ -322,7 +322,8 @@ def ulasan_user(query):
         bot.reply_to(query, "Ok, catatan telah ditambahkan")
         bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
         bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
-    elif ["/alm", "/t", "/nt"] not in query.text:
+        status_note[query.chat.id] = "done"
+    elif "/alm" not in query.text:
         respon = [
         "Maaf kami tidak dapat mengikuti instruksi ini.",
         "Kami tidak melayani permintaan ini",
