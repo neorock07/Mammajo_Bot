@@ -209,38 +209,6 @@ def save_alamat(query):
 
 
 
-    
-@bot.message_handler(content_types=["contact"])
-def save_kontak(msg):
-    global buy_what
-    if msg.contact is not None:
-        nomer = msg.contact.phone_number
-        buy_what.append(nomer)
-        bot.reply_to(msg, "Ok, nomor Anda sudah kami simpan!")
-        bot.send_message(msg.chat.id, "Apakah ada catatan untuk pesanan ini ?",reply_markup=markup_note())
-
-
-
-def markup_order():
-    markup = InlineKeyboardMarkup(
-            row_width= 2,   
-        )
-    markup.add(
-            InlineKeyboardButton(
-                "Sudah, pesan sekarang",
-                callback_data = "ok"
-            ),
-            InlineKeyboardButton(
-                "Ulangi",
-                callback_data = "ulangi"
-            ),
-        )
-    return markup    
-
-@bot.message_handler(commands=['cancel'])
-def cancel_operation(msg):
-    bot.send_message(msg.chat.id, "Baik, instruksi dibatalkan\nSemoga lain kali mampir lagi ya!")
-
 def markup_note():
     markup = InlineKeyboardMarkup(
             row_width= 2,   
@@ -256,6 +224,16 @@ def markup_note():
             ),
         )
     return markup    
+
+    
+@bot.message_handler(content_types=["contact"])
+def save_kontak(msg):
+    global buy_what
+    if msg.contact is not None:
+        nomer = msg.contact.phone_number
+        buy_what.append(nomer)
+        bot.reply_to(msg, "Ok, nomor Anda sudah kami simpan!")
+        bot.send_message(msg.chat.id, "Apakah ada catatan untuk pesanan ini ?",reply_markup=markup_note())
 
     
 chat_id_neo = 1620737884
@@ -290,6 +268,23 @@ def save_catatan(query):
             bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
             bot.send_message(query.chat.id, "Apakah pesanan sudah benar ?", reply_markup = markup_order())
 
+def markup_order():
+    markup = InlineKeyboardMarkup(
+            row_width= 2,   
+        )
+    markup.add(
+            InlineKeyboardButton(
+                "Sudah, pesan sekarang",
+                callback_data = "ok"
+            ),
+            InlineKeyboardButton(
+                "Ulangi",
+                callback_data = "ulangi"
+            ),
+        )
+    return markup    
+
+
 @bot.message_handler(func=lambda query: True)
 def ulasan_user(query):
     if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
@@ -317,6 +312,12 @@ def ulasan_user(query):
         ]
         acak = random.randint(0, 3)
         bot.reply_to(query, respon[acak])    
+
+
+
+@bot.message_handler(commands=['cancel'])
+def cancel_operation(msg):
+    bot.send_message(msg.chat.id, "Baik, instruksi dibatalkan\nSemoga lain kali mampir lagi ya!")
 
 
 
