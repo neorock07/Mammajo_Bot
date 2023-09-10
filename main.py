@@ -215,22 +215,6 @@ def save_kontak(msg):
         bot.reply_to(msg, "Ok, nomor Anda sudah kami simpan!")
         bot.send_message(msg.chat.id, "Apakah ada catatan untuk pesanan ini ?\njika tidak ketik `/t`, jika ya awali dengan `/nt` untuk membalas.\ncontoh : <b>/nt gulanya sedikit saja.</b>", parse_mode="HTML")
 
-@bot.message_handler(func=lambda query: True)
-def ulasan_user(query):
-    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
-        sheet4.append_row([query.text])
-        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
-        status_msg[query.chat.id] = "done"
-    elif "/alm" not in query.text:
-        respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-        ]
-        acak = random.randint(0, 3)
-        bot.reply_to(query, respon[acak])    
-
 
 def markup_order():
     markup = InlineKeyboardMarkup(
@@ -281,6 +265,23 @@ def save_catatan(query):
         print(buy_what)
         bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
         bot.send_message(query.chat.id, "Apakah pesanan sudah benar ?", reply_markup = markup_order())
+
+@bot.message_handler(func=lambda query: True)
+def ulasan_user(query):
+    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
+        sheet4.append_row([query.text])
+        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
+        status_msg[query.chat.id] = "done"
+    elif ["/alm", "/t", "/nt"] not in query.text:
+        respon = [
+        "Maaf kami tidak dapat mengikuti instruksi ini.",
+        "Kami tidak melayani permintaan ini",
+        "Saya tidak tahu maksud Anda",
+        "Harap memberikan instruksi sesuai petunjuk ya"
+        ]
+        acak = random.randint(0, 3)
+        bot.reply_to(query, respon[acak])    
+
 
 def markup_status(callback):
     markup = InlineKeyboardMarkup(
