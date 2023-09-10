@@ -294,7 +294,7 @@ def save_catatan(query):
     # Mengubah waktu menjadi format yang lebih umum
     waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
     global buy_what
-    if query.data.find('/nt') != -1 :
+    if query.data.find('nt') != -1 :
         # note = query.text.split("/nt ")
         # buy_what.append(note[1])
         # buy_what.append(waktu_umum)
@@ -306,7 +306,7 @@ def save_catatan(query):
         status_note[query.message.chat.id] = "waiting"
         bot.send_message(query.chat.id, "Ok, kalau begitu apa catatanya ? ")
         
-    elif query.text.find('/t') != -1:
+    elif query.text.find('t') != -1:
         buy_what.append("-")
         buy_what.append(waktu_umum)
         buy_what.append(id_user)
