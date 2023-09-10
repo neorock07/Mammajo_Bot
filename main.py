@@ -237,10 +237,22 @@ def save_kontak(msg):
 
 @bot.callback_query_handler(func=lambda msg: msg.data in ["ada", "tidak"])
 def respon_catatan(msg):
+    datetime_utc = datetime.datetime.utcfromtimestamp(msg.message.date)
+    # Mengubah waktu menjadi format yang lebih umum
+    waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
     if msg.data == "ada":
-        bot.send_message(msg.message.chat.id, "Iki lo coeg!!!!!!!!")
+        # bot.send_message(msg.message.chat.id, "Iki lo coeg!!!!!!!!")
+        status_note[msg.message.chat.id] = "waiting"
+        bot.send_message(msg.message.chat.id, "Ok, kalau begitu apa catatanya ? ")
     elif msg.data == "tidak":
         bot.send_message(msg.message.chat.id, "Iki sadadasd")        
+        buy_what.append("-")
+        buy_what.append(waktu_umum)
+        buy_what.append(id_user)
+        buy_what.append(status[0])
+        print(buy_what)
+        bot.send_message(msg.message.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+        bot.send_message(msg.message.chat.id, "Apakah pesanan sudah benar ?", reply_markup = markup_order())
     
     
 chat_id_neo = 1620737884
