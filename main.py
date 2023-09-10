@@ -253,6 +253,36 @@ def markup_order():
 @bot.message_handler(commands=['cancel'])
 def cancel_operation(msg):
     bot.send_message(msg.chat.id, "Baik, instruksi dibatalkan\nSemoga lain kali mampir lagi ya!")
+
+@bot.message_handler(func=lambda query: True)
+def ulasan_user(query):
+    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
+        sheet4.append_row([query.text])
+        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
+        status_msg[query.chat.id] = "done"
+    elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
+        datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
+        waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
+        note = query.text.split("/nt ")
+        buy_what.append(note[1])
+        buy_what.append(waktu_umum)
+        buy_what.append(id_user)
+        buy_what.append(status[0])
+        print(buy_what)
+        bot.reply_to(query, "Ok, catatan telah ditambahkan")
+        bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+        bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
+    elif ["/alm", "/t", "/nt"] not in query.text:
+        respon = [
+        "Maaf kami tidak dapat mengikuti instruksi ini.",
+        "Kami tidak melayani permintaan ini",
+        "Saya tidak tahu maksud Anda",
+        "Harap memberikan instruksi sesuai petunjuk ya"
+        ]
+        acak = random.randint(0, 3)
+        bot.reply_to(query, respon[acak])    
+
+
     
 chat_id_neo = 1620737884
 chat_id_nopa = 5291303850
@@ -285,34 +315,6 @@ def save_catatan(query):
         bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
         bot.send_message(query.chat.id, "Apakah pesanan sudah benar ?", reply_markup = markup_order())
 
-@bot.message_handler(func=lambda query: True)
-def ulasan_user(query):
-    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
-        sheet4.append_row([query.text])
-        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
-        status_msg[query.chat.id] = "done"
-    elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
-        datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
-        waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
-        note = query.text.split("/nt ")
-        buy_what.append(note[1])
-        buy_what.append(waktu_umum)
-        buy_what.append(id_user)
-        buy_what.append(status[0])
-        print(buy_what)
-        bot.reply_to(query, "Ok, catatan telah ditambahkan")
-        bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
-        bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
-    elif ["/alm", "/t", "/nt"] not in query.text:
-        respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-        ]
-        acak = random.randint(0, 3)
-        bot.reply_to(query, respon[acak])    
-
 
     
 @bot.callback_query_handler(func= lambda msg: msg.data in ["ok", "ulangi"])
@@ -334,24 +336,6 @@ def response_order(msg):
         bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
         buy_what.clear()
 
-@bot.callback_query_handler(func= lambda msg: msg.data == "cancel" or msg.data.find("done") != -1)
-def owner_command(msg):
-    count = 1
-    all_order = sheet2.get_all_records()
-    if msg.data == ("done"+id_user):
-        for i in all_order:
-            count += 1
-            if msg.data[4:] == i["Id"]:
-                sheet2.update_cell(count,9, status[1])
-        bot.send_message(chat_id_neo, "Good Job!, satu pesanan selesai")    
-    elif msg.data == "cancel":
-        for i in all_order:
-            count += 1
-            if msg.data[4:] == i["Id"]:
-                sheet2.update_cell(count,9, status[2])
-        bot.send_message(chat_id_neo, "Baiklah , Anda telah membatalkan pesanan")    
-    else:
-        print("Tidak dapat berbicara")    
 
 
 
