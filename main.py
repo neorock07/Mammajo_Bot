@@ -216,11 +216,11 @@ def markup_note():
     markup.add(
             InlineKeyboardButton(
                 "Ya",
-                callback_data = "nt"
+                callback_data = "ada"
             ),
             InlineKeyboardButton(
                 "Tidak",
-                callback_data = "t"
+                callback_data = "tidak"
             ),
         )
     return markup    
@@ -241,13 +241,13 @@ chat_id_nopa = 5291303850
 id_stiker = "CAACAgIAAxkBAAEKGGpk5OsNFh2HGd7pLDGx9vtqeKMuLwACLgEAAvcCyA89lj6kwiWnGjAE"
 id_user = "MMJO" + str((len(sheet2.get_all_records()) + 1)) if sheet2.get_all_records() != None else "MMJO1"
 
-@bot.callback_query_handler(func=lambda query: query.data in ["nt", "t"])
+@bot.callback_query_handler(func=lambda query: query.data in ["ada", "tidak"])
 def save_catatan(query):
     datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
     # Mengubah waktu menjadi format yang lebih umum
     waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
     global buy_what
-    if query.data == "nt":
+    if query.data == "ada":
         # note = query.text.split("/nt ")
         # buy_what.append(note[1])
         # buy_what.append(waktu_umum)
@@ -259,7 +259,7 @@ def save_catatan(query):
         status_note[query.message.chat.id] = "waiting"
         bot.send_message(query.chat.id, "Ok, kalau begitu apa catatanya ? ")
             
-    elif query.data == "t":
+    elif query.data == "tidak":
             buy_what.append("-")
             buy_what.append(waktu_umum)
             buy_what.append(id_user)
