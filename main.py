@@ -8,7 +8,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup,ReplyKeyboardMarkup,KeyboardButtonPollType
 from telebot.types import KeyboardButton
-import schedule, time
+import schedule, time, random
 import threading
 
 load_dotenv()
@@ -20,6 +20,7 @@ sheet = ''
 sheet2 = ''
 sheet3 = ''
 sheet4 = ''
+status_msg = {}
 
 def connect_spreadsheet():
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
@@ -171,13 +172,26 @@ def choose_menu(msg):
     
 @bot.callback_query_handler(func= lambda msg:msg.data == "ulasan")
 def user_feedback(msg):
-    bot.send_message(msg.message.chat.id, "Ulasan Anda beguna bagi kami untuk meningkatkan kualitas pelayanan kami!\nSilahkan kirimkan ulasan Anda awali dengan ketik `/fb`\ncontoh: /fb banyakin event diskon dong :)")
+    status_msg[msg.message.chat.id] = "waiting"
+    bot.send_message(msg.message.chat.id, "Kami bersedia menerima saran dan ulasan Anda demi kemajuan kualitas pelayanan kami\nSilahkan kirimkan ulasan Anda")
     
-@bot.message_handler(func=lambda query: '/fb' in query.text )
+@bot.message_handler(func=lambda query: True)
 def ulasan_user(query):
-    sheet4.append_row([query.text])
-    bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
-    
+    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
+        sheet4.append_row([query.text])
+        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
+        status_msg[query.chat.id] = "done"
+    else:
+        respon = [
+        "Maaf kami tidak dapat mengikuti instruksi ini.",
+        "Kami tidak melayani permintaan ini",
+        "Saya tidak tahu maksud Anda",
+        "Harap memberikan instruksi sesuai petunjuk ya"
+        ]
+        acak = random.randint(0, 3)
+        bot.reply_to(query, respon[acak])    
+            
+        
 @bot.message_handler(func=lambda query: '/alm' in query.text )
 def save_alamat(query):
     global buy_what
@@ -270,18 +284,6 @@ def markup_status(callback):
     )
     return markup
 
-import random
-
-@bot.message_handler(func=lambda msg: True)
-def handle_exception(msg):
-    respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-    ]
-    acak = random.randint(0, 3)
-    bot.reply_to(msg, respon[acak])
     
 @bot.callback_query_handler(func= lambda msg: msg.data in ["ok", "ulangi"])
 def response_order(msg):
