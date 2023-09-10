@@ -214,11 +214,11 @@ def markup_note():
     markup.add(
             InlineKeyboardButton(
                 "Ya",
-                callback_data = "nt"
+                callback_data = "ada"
             ),
             InlineKeyboardButton(
                 "Tidak",
-                callback_data = "t"
+                callback_data = "tidak"
             ),
         )
     return markup    
@@ -254,33 +254,33 @@ def markup_order():
 def cancel_operation(msg):
     bot.send_message(msg.chat.id, "Baik, instruksi dibatalkan\nSemoga lain kali mampir lagi ya!")
 
-@bot.message_handler(func=lambda query: True)
-def ulasan_user(query):
-    if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
-        sheet4.append_row([query.text])
-        bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
-        status_msg[query.chat.id] = "done"
-    elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
-        datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
-        waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
-        note = query.text.split("/nt ")
-        buy_what.append(note[1])
-        buy_what.append(waktu_umum)
-        buy_what.append(id_user)
-        buy_what.append(status[0])
-        print(buy_what)
-        bot.reply_to(query, "Ok, catatan telah ditambahkan")
-        bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
-        bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
-    elif ["/alm", "/t", "/nt"] not in query.text:
-        respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-        ]
-        acak = random.randint(0, 3)
-        bot.reply_to(query, respon[acak])    
+# @bot.message_handler(func=lambda query: True)
+# def ulasan_user(query):
+#     if query.chat.id in status_msg and status_msg[query.chat.id] == 'waiting':
+#         sheet4.append_row([query.text])
+#         bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
+#         status_msg[query.chat.id] = "done"
+#     elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
+#         datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
+#         waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
+#         note = query.text.split("/nt ")
+#         buy_what.append(note[1])
+#         buy_what.append(waktu_umum)
+#         buy_what.append(id_user)
+#         buy_what.append(status[0])
+#         print(buy_what)
+#         bot.reply_to(query, "Ok, catatan telah ditambahkan")
+#         bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+#         bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
+#     elif ["/alm", "/t", "/nt"] not in query.text:
+#         respon = [
+#         "Maaf kami tidak dapat mengikuti instruksi ini.",
+#         "Kami tidak melayani permintaan ini",
+#         "Saya tidak tahu maksud Anda",
+#         "Harap memberikan instruksi sesuai petunjuk ya"
+#         ]
+#         acak = random.randint(0, 3)
+#         bot.reply_to(query, respon[acak])    
 
 
     
@@ -288,11 +288,12 @@ chat_id_neo = 1620737884
 chat_id_nopa = 5291303850
 id_stiker = "CAACAgIAAxkBAAEKGGpk5OsNFh2HGd7pLDGx9vtqeKMuLwACLgEAAvcCyA89lj6kwiWnGjAE"
 id_user = "MMJO" + str((len(sheet2.get_all_records()) + 1)) if sheet2.get_all_records() != None else "MMJO1"
-@bot.callback_query_handler(func=lambda query: query.data == "nt")
+
+@bot.callback_query_handler(func=lambda query: query.data == "ada")
 def save_catatan(query):
     datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
     # Mengubah waktu menjadi format yang lebih umum
-    waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
+    # waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
     global buy_what
     # if query.data.find('nt') != -1 :
         # note = query.text.split("/nt ")
