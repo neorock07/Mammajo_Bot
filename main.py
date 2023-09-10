@@ -233,6 +233,25 @@ def save_kontak(msg):
         bot.reply_to(msg, "Ok, nomor Anda sudah kami simpan!")
         bot.send_message(msg.chat.id, "Apakah ada catatan untuk pesanan ini ?",reply_markup=markup_note())
 
+@bot.callback_query_handler(func= lambda msg: msg.data in ["ada", "tidak"])
+def response_order(msg):
+    if msg.data == "ada":
+        sheet2.append_row(buy_what)
+        bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
+        bot.send_message(
+            chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
+            .format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5])
+                # ,reply_markup=markup_status(id_user)
+                ,parse_mode = "HTML"
+                
+            )
+        bot.send_sticker(msg.message.chat.id, id_stiker)
+        buy_what.clear()
+    elif msg.data == "tidak":
+        # sheet2.append_row(buy_what)
+        bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
+        buy_what.clear()
+
 
 def markup_order():
     markup = InlineKeyboardMarkup(
@@ -318,24 +337,6 @@ def save_catatan(query):
 
 
     
-@bot.callback_query_handler(func= lambda msg: msg.data in ["ada", "tidak"])
-def response_order(msg):
-    if msg.data == "ada":
-        sheet2.append_row(buy_what)
-        bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
-        bot.send_message(
-            chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
-            .format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5])
-                # ,reply_markup=markup_status(id_user)
-                ,parse_mode = "HTML"
-                
-            )
-        bot.send_sticker(msg.message.chat.id, id_stiker)
-        buy_what.clear()
-    elif msg.data == "tidak":
-        # sheet2.append_row(buy_what)
-        bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
-        buy_what.clear()
 
 
 
