@@ -194,7 +194,7 @@ def ulasan_user(query):
         sheet4.append_row([query.text])
         bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
         status_msg[query.chat.id] = "done"
-    else:
+    elif "/alm" not in query.text:
         respon = [
         "Maaf kami tidak dapat mengikuti instruksi ini.",
         "Kami tidak melayani permintaan ini",
