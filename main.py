@@ -318,9 +318,9 @@ def save_catatan(query):
 
 
     
-@bot.callback_query_handler(func= lambda msg: msg.data in ["ok", "ulangi"])
+@bot.callback_query_handler(func= lambda msg: msg.data in ["ada", "tidak"])
 def response_order(msg):
-    if msg.data == "ok":
+    if msg.data == "ada":
         sheet2.append_row(buy_what)
         bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
         bot.send_message(
@@ -332,7 +332,7 @@ def response_order(msg):
             )
         bot.send_sticker(msg.message.chat.id, id_stiker)
         buy_what.clear()
-    elif msg.data == "ulangi":
+    elif msg.data == "tidak":
         # sheet2.append_row(buy_what)
         bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
         buy_what.clear()
