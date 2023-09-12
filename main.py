@@ -67,6 +67,7 @@ def main_menu():
 
 txt_menu = ""
 item = []
+item2 = []
 index = 1
 #nomer urut promo
 indices = 1
@@ -93,11 +94,20 @@ print(txt_menu)
 #         )
 #     return markup    
 
+def get_promo_msg():
+    txt_promo = ''
+    dt = sheet3.get_all_records()
+    cf = []
+    for i in dt:
+        txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
+        item2.append(str(indices))
+        indices += 1
+    cf.append(dt, txt_promo)    
+    return cf    
 
 @bot.callback_query_handler(func= lambda msg : msg.data == "promo" )
 def show_promo(msg):    
-    txt_promo = ''
-    dt = sheet3.get_all_records()
+   
     # pprint(dt)
     # bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
     
@@ -107,15 +117,10 @@ def show_promo(msg):
     #     InlineKeyboardButton("A", callback_data="a"),
     # )
      
-    if dt != []:
-        for i in dt:
-            txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
-            item.append(str(indices))
-            markup.add(
-                InlineKeyboardButton("A", callback_data="a"),       
-            )
-            indices += 1
-            bot.send_message(msg.message.chat.id, f"<b>Daftar Promo Hari ini</b>\n{txt_promo}", parse_mode="HTML")            
+    if get_promo_msg()[0] != []:
+        for i in get_promo_msg()[0]:
+            get_promo_msg()
+            bot.send_message(msg.message.chat.id, f"<b>Daftar Promo Hari ini</b>\n{get_promo_msg()[1]}", parse_mode="HTML")            
         # bot.send_message(msg.message.chat.id,"Silahkan klik tombol dibawah untuk memilih promo!", reply_markup=markup)
         # bot.send_message(msg.message.chat.id,"iki lo coeg", reply_markup=markup)    
     else:
