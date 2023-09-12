@@ -84,28 +84,6 @@ for i in data:
     index += 1
 print(txt_menu)    
 
-
-# def select_promo(index):
-#     markup = InlineKeyboardMarkup()
-#     markup.row_width = 3
-#     for i in range(0, index):
-#         markup.add(
-#             InlineKeyboardButton(f"{i+1}", callback_data=f"pm_{i+1}"),       
-#         )
-#     return markup    
-
-# def get_promo_msg():
-#     txt_promo = ''
-#     dt = sheet3.get_all_records()
-#     cf = []
-#     for i in dt:
-#         txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
-#         item2.append(str(indices))
-#         indices += 1
-#     cf.append(dt, txt_promo)    
-#     return cf    
-
-
 markup_promo = InlineKeyboardMarkup()
 markup_promo.row_width = 3
    
@@ -223,9 +201,9 @@ def respon_promo(msg):
     itm = 0
     itm2 = []
     stuf = ''
-    txt = msg.text.split("pm_")
-    first_name = msg.chat.first_name
-    last_name = msg.chat.last_name
+    txt = msg.data.split("pm_")
+    first_name = msg.message.chat.first_name
+    last_name = msg.message.chat.last_name
     itm = txt[1]
     nm = first_name + " " + last_name if (last_name is not None)  else first_name    
     buy_what2.append(nm)
@@ -234,12 +212,12 @@ def respon_promo(msg):
     print(item_pick)
     total = int(item_pick[1])
     # daftar pesanan di simpan di variabel ini
-    stuf = item_pick[0] + " x" + item_pick[1] + "\n"
+    stuf = item_pick[0] + "\n"
     #menyimpan pesanan dan total harga
     buy_what2.append(stuf)
     buy_what2.append(total)
-    bot.reply_to(msg,"baik pesanan Anda sudah kami simpan")
-    bot.send_message(msg.chat.id,"Selanjutnya, berikan Alamat delivery-nya !\nbalas dengan format: /alm `alamat anda`\n<b>contoh : /alm jln.Gatotkaca, Tipes</b>", parse_mode = "HTML")
+    bot.reply_to(msg.message,"baik pesanan Anda sudah kami simpan")
+    bot.send_message(msg.message.chat.id,"Selanjutnya, berikan Alamat delivery-nya !\nbalas dengan format: /alm `alamat anda`\n<b>contoh : /alm jln.Gatotkaca, Tipes</b>", parse_mode = "HTML")
 
     
 @bot.callback_query_handler(func= lambda msg:msg.data == "ulasan")
@@ -290,7 +268,8 @@ def save_kontak(msg):
     global buy_what
     if msg.contact is not None:
         nomer = msg.contact.phone_number
-        buy_what.append(nomer)
+        # buy_what.append(nomer)
+        buy_what.append(nomer) if buy_what != [] else buy_what2.append(nomer)
         bot.reply_to(msg, "Ok, nomor Anda sudah kami simpan!")
         bot.send_message(msg.chat.id, "Apakah ada catatan untuk pesanan ini ?",reply_markup=markup_note())
 
@@ -304,13 +283,22 @@ def respon_catatan(msg):
         status_note[msg.message.chat.id] = "waiting"
         bot.send_message(msg.message.chat.id, "Ok, kalau begitu apa catatanya ? ")
     elif msg.data == "tidak":
-        bot.send_message(msg.message.chat.id, "Iki sadadasd")        
-        buy_what.append("-")
-        buy_what.append(waktu_umum)
-        buy_what.append(id_user)
-        buy_what.append(status[0])
-        print(buy_what)
-        bot.send_message(msg.message.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+        if buy_what != []:        
+            buy_what.append("-")
+            buy_what.append(waktu_umum)
+            buy_what.append(id_user)
+            buy_what.append(status[0])
+            print(buy_what)
+            bot.send_message(msg.message.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+            
+        else:
+            buy_what2.append("-")
+            buy_what2.append(waktu_umum)
+            buy_what2.append(id_user)
+            buy_what2.append(status[0])
+            print(buy_what2)
+            bot.send_message(msg.message.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what2[7],buy_what2[0],buy_what2[1],int(buy_what2[2]),buy_what2[3],buy_what2[4], buy_what2[5]), parse_mode="HTML")
+                
         bot.send_message(msg.message.chat.id, "Apakah pesanan sudah benar ?", reply_markup = markup_order())
     
     
@@ -318,33 +306,6 @@ chat_id_neo = 1620737884
 chat_id_nopa = 5291303850
 id_stiker = "CAACAgIAAxkBAAEKGGpk5OsNFh2HGd7pLDGx9vtqeKMuLwACLgEAAvcCyA89lj6kwiWnGjAE"
 id_user = "MMJO" + str((len(sheet2.get_all_records()) + 1)) if sheet2.get_all_records() != None else "MMJO1"
-
-# @bot.callback_query_handler(func=lambda query: query.data in ["ada", "tidak"])
-# def save_catatan(query):
-#     datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
-#     # Mengubah waktu menjadi format yang lebih umum
-#     waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
-#     global buy_what
-#     if query.data == "ada":
-        # note = query.text.split("/nt ")
-        # buy_what.append(note[1])
-        # buy_what.append(waktu_umum)
-        # buy_what.append(id_user)
-        # buy_what.append(status[0])
-        # print(buy_what)
-        # bot.reply_to(query, "Ok, catatan telah ditambahkan")
-        # bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
-    #     status_note[query.message.chat.id] = "waiting"
-    #     bot.send_message(query.chat.id, "Ok, kalau begitu apa catatanya ? ")
-            
-    # elif query.data == "tidak":
-    #         buy_what.append("-")
-    #         buy_what.append(waktu_umum)
-    #         buy_what.append(id_user)
-    #         buy_what.append(status[0])
-    #         print(buy_what)
-    #         bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
-    #         bot.send_message(query.chat.id, "Apakah pesanan sudah benar ?", reply_markup = markup_order())
 
 def markup_order():
     markup = InlineKeyboardMarkup(
@@ -369,39 +330,38 @@ def ulasan_user(query):
         sheet4.append_row([query.text])
         bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
         status_msg[query.chat.id] = "done"
-    # elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
-    #     datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
-    #     waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
-    #     note = query.text.split("/nt ")
-    #     buy_what.append(note[1])
-    #     buy_what.append(waktu_umum)
-    #     buy_what.append(id_user)
-    #     buy_what.append(status[0])
-    #     print(buy_what)
-    #     bot.reply_to(query, "Ok, catatan telah ditambahkan")
-    #     bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
-    #     bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
-    #     status_note[query.chat.id] = "done"
-    # elif "/alm" not in query.text:
-    #     respon = [
-    #     "Maaf kami tidak dapat mengikuti instruksi ini.",
-    #     "Kami tidak melayani permintaan ini",
-    #     "Saya tidak tahu maksud Anda",
-    #     "Harap memberikan instruksi sesuai petunjuk ya"
-    #     ]
-    #     acak = random.randint(0, 3)
-    #     bot.reply_to(query, respon[acak])    
+    
+    if "/alm" not in query.text and status_note[query.chat.id] == "done" and status_msg[query.chat.id] == "done" :
+        respon = [
+        "Maaf kami tidak dapat mengikuti instruksi ini.",
+        "Kami tidak melayani permintaan ini",
+        "Saya tidak tahu maksud Anda",
+        "Harap memberikan instruksi sesuai petunjuk ya"
+        ]
+        acak = random.randint(0, 3)
+        bot.reply_to(query, respon[acak])
+            
     if query.chat.id in status_note and status_note[query.chat.id] == "waiting":
         datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
         waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
-        note = query.text.split("/nt ")
-        buy_what.append(note[1])
-        buy_what.append(waktu_umum)
-        buy_what.append(id_user)
-        buy_what.append(status[0])
-        print(buy_what)
-        bot.reply_to(query, "Ok, catatan telah ditambahkan")
-        bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+        catatan = query.text
+        if buy_what != []:
+            buy_what.append(catatan)
+            buy_what.append(waktu_umum)
+            buy_what.append(id_user)
+            buy_what.append(status[0])
+            print(buy_what)
+            bot.reply_to(query, "Ok, catatan telah ditambahkan")
+            bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+        else:
+            buy_what2.append(catatan)
+            buy_what2.append(waktu_umum)
+            buy_what2.append(id_user)
+            buy_what2.append(status[0])
+            print(buy_what2)    
+            bot.reply_to(query, "Ok, catatan telah ditambahkan")
+            bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what2[7],buy_what2[0],buy_what2[1],int(buy_what2[2]),buy_what2[3],buy_what2[4], buy_what2[5]), parse_mode="HTML")
+        
         bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
         status_note[query.chat.id] = "done"
 
@@ -409,28 +369,46 @@ def ulasan_user(query):
 @bot.message_handler(commands=['cancel'])
 def cancel_operation(msg):
     bot.send_message(msg.chat.id, "Baik, instruksi dibatalkan\nSemoga lain kali mampir lagi ya!")
-
+    buy_what.clear()
+    buy_what2.clear()
 
 
 @bot.callback_query_handler(func= lambda msg: msg.data in ["ok", "ulangi"])
 def response_order(msg):
     if msg.data == "ok":
-        sheet2.append_row(buy_what)
-        bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
-        bot.send_message(
-            chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
-            .format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5])
-                # ,reply_markup=markup_status(id_user)
-                ,parse_mode = "HTML"
-                
-            )
-        bot.send_sticker(msg.message.chat.id, id_stiker)
+        sheet2.append_row(buy_what) if buy_what != [] else sheet2.append_row(buy_what2)
+        
+        
+        if buy_what != []:
+            bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
+            bot.send_sticker(msg.message.chat.id, id_stiker) 
+            bot.send_message(
+                chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
+                .format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5])
+                    # ,reply_markup=markup_status(id_user)
+                    ,parse_mode = "HTML"
+                    
+                )
+        elif buy_what2 != []:
+            bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
+            bot.send_sticker(msg.message.chat.id, id_stiker)
+            bot.send_message(
+                chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
+                .format(buy_what2[7],buy_what2[0],buy_what2[1],int(buy_what2[2]),buy_what2[3],buy_what2[4], buy_what2[5])
+                    # ,reply_markup=markup_status(id_user)
+                    ,parse_mode = "HTML"
+                    
+                )
+
+        else:
+            bot.send_message(msg.message.chat.id, "Maaf Silahkan ulangi pesanan dengan /start")        
         buy_what.clear()
+        buy_what2.clear()
     elif msg.data == "ulangi":
         # sheet2.append_row(buy_what)
         bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
         buy_what.clear()
-    
+        buy_what2.clear()    
 
 
 
@@ -455,4 +433,4 @@ if __name__ == "__main__":
     )
     
         
-    # bot.infinity_polling()   
+# bot.infinity_polling()   
