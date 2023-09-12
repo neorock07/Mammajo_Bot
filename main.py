@@ -94,16 +94,23 @@ print(txt_menu)
 #         )
 #     return markup    
 
-def get_promo_msg():
-    txt_promo = ''
-    dt = sheet3.get_all_records()
-    cf = []
-    for i in dt:
-        txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
-        item2.append(str(indices))
-        indices += 1
-    cf.append(dt, txt_promo)    
-    return cf    
+# def get_promo_msg():
+#     txt_promo = ''
+#     dt = sheet3.get_all_records()
+#     cf = []
+#     for i in dt:
+#         txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
+#         item2.append(str(indices))
+#         indices += 1
+#     cf.append(dt, txt_promo)    
+#     return cf    
+txt_promo = ''
+dt = sheet3.get_all_records()
+for i in dt:
+    txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
+    item2.append(str(indices))
+    indices += 1 
+   
 
 @bot.callback_query_handler(func= lambda msg : msg.data == "promo" )
 def show_promo(msg):    
@@ -116,13 +123,6 @@ def show_promo(msg):
     # markup.add(
     #     InlineKeyboardButton("A", callback_data="a"),
     # )
-    txt_promo = ''
-    dt = sheet3.get_all_records()
-    cf = []
-    for i in dt:
-        txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
-        item2.append(str(indices))
-        indices += 1 
      
     if dt != []:
         # for i in get_promo_msg()[0]:
