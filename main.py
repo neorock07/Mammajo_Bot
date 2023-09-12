@@ -103,9 +103,9 @@ def show_promo(msg):
     
     markup = InlineKeyboardMarkup()
     markup.row_width = 1
-    markup.add(
-        InlineKeyboardButton("A", callback_data="a"),
-    )
+    # markup.add(
+    #     InlineKeyboardButton("A", callback_data="a"),
+    # )
      
     if dt != []:
         for i in dt:
@@ -117,7 +117,7 @@ def show_promo(msg):
             indices += 1
             bot.send_message(msg.message.chat.id, f"<b>Daftar Promo Hari ini</b>\n{txt_promo}", parse_mode="HTML")            
         # bot.send_message(msg.message.chat.id,"Silahkan klik tombol dibawah untuk memilih promo!", reply_markup=markup)
-        bot.send_message(msg.message.chat.id,"iki lo coeg", reply_markup=markup)    
+        # bot.send_message(msg.message.chat.id,"iki lo coeg", reply_markup=markup)    
     else:
         bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
 
