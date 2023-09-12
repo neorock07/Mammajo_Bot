@@ -156,13 +156,21 @@ def query_menu(message):
 def findItemByNumber(number):
     dt = sheet.row_values(number + 1)
     return dt
+
+def findPricePromo(number):
+    dt = sheet3.row_values(number + 1)
+    return dt
         
 def diskon(origin, diskon):
     return (origin) - (origin)*diskon/100
 
+#buy what2 untuk promo
 buy_what = []
+buy_what2 = []
 @bot.message_handler(func=lambda msg: msg.text.find("*") != -1)
 def choose_menu(msg):
+    #hapus data pilih promo ketika pilih menu
+    buy_what2.clear()
     global buy_what
     b = ''
     stuf = ''
@@ -203,6 +211,36 @@ def choose_menu(msg):
         buy_what.append(i)
     bot.reply_to(msg,"baik pesanan Anda sudah kami simpan")
     bot.send_message(msg.chat.id,"Selanjutnya, berikan Alamat delivery-nya !\nbalas dengan format: /alm `alamat anda`\n<b>contoh : /alm jln.Gatotkaca, Tipes</b>", parse_mode = "HTML")
+
+@bot.callback_query_handler(func= lambda msg : "pm_" in msg.data)
+def respon_promo(msg):
+    #hapus data pilih menu ketika pilih promo
+    buy_what.clear()
+    #inisialiasai promo
+    global buy_what2
+    total = 0
+    #array nomer urut & jumlah barang
+    itm = 0
+    itm2 = []
+    stuf = ''
+    txt = msg.text.split("pm_")
+    first_name = msg.chat.first_name
+    last_name = msg.chat.last_name
+    itm = txt[1]
+    nm = first_name + " " + last_name if (last_name is not None)  else first_name    
+    buy_what2.append(nm)
+       
+    item_pick = findPricePromo(int(itm))
+    print(item_pick)
+    total = int(item_pick[1])
+    # daftar pesanan di simpan di variabel ini
+    stuf = item_pick[0] + " x" + item_pick[1] + "\n"
+    #menyimpan pesanan dan total harga
+    buy_what2.append(stuf)
+    buy_what2.append(total)
+    bot.reply_to(msg,"baik pesanan Anda sudah kami simpan")
+    bot.send_message(msg.chat.id,"Selanjutnya, berikan Alamat delivery-nya !\nbalas dengan format: /alm `alamat anda`\n<b>contoh : /alm jln.Gatotkaca, Tipes</b>", parse_mode = "HTML")
+
     
 @bot.callback_query_handler(func= lambda msg:msg.data == "ulasan")
 def user_feedback(msg):
@@ -213,8 +251,9 @@ def user_feedback(msg):
 @bot.message_handler(func=lambda query: '/alm' in query.text )
 def save_alamat(query):
     global buy_what
+    global buy_what2
     alamat = query.text.split("/alm ")
-    buy_what.append(alamat[1])
+    buy_what.append(alamat[1]) if buy_what != [] else buy_what2.append(alamat[1])
     bot.reply_to(query, "Ok, alamat Anda berhasil disimpan!")
     markup = ReplyKeyboardMarkup(
         resize_keyboard=True,
