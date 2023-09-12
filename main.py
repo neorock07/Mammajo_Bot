@@ -372,12 +372,13 @@ def cancel_operation(msg):
     buy_what.clear()
     buy_what2.clear()
 
+status_order = {}
 
 @bot.callback_query_handler(func= lambda msg: msg.data in ["ok", "ulangi"])
 def response_order(msg):
     if msg.data == "ok":
+        status_order[msg.message.chat.id] = "ok"
         sheet2.append_row(buy_what) if buy_what != [] else sheet2.append_row(buy_what2)
-        
         
         if buy_what != []:
             bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
@@ -405,8 +406,12 @@ def response_order(msg):
         buy_what.clear()
         buy_what2.clear()
     elif msg.data == "ulangi":
+        if msg.message.chat.id in status_order and status_order[msg.message.chat.id] == "ok":
+            bot.send_message(msg.message.chat.id, "Maaf pesanan tidak dapat dibatalkan\nSilahkan konfirmasi ke @NeoYuli untuk membatalkan pesanan")    
+        else:
         # sheet2.append_row(buy_what)
-        bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
+            bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
+        status_order[msg.message.chat.id] = "sudah"    
         buy_what.clear()
         buy_what2.clear()    
 
