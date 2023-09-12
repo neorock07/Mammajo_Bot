@@ -384,8 +384,8 @@ def response_order(msg):
             bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
             bot.send_sticker(msg.message.chat.id, id_stiker) 
             bot.send_message(
-                chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
-                .format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5])
+                chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nChat : {}\nNo.Tele : +{}\nCatatan : {}"
+                .format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],msg.message.chat.username,buy_what[4], buy_what[5])
                     # ,reply_markup=markup_status(id_user)
                     ,parse_mode = "HTML"
                     
@@ -394,8 +394,8 @@ def response_order(msg):
             bot.send_message(msg.message.chat.id, "Baik pesanan Anda segera kami proses, mohon ditunggu ya!\nTerima Kasih atas pesanan Anda")
             bot.send_sticker(msg.message.chat.id, id_stiker)
             bot.send_message(
-                chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nNo.Tele : +{}\nCatatan : {}"
-                .format(buy_what2[7],buy_what2[0],buy_what2[1],int(buy_what2[2]),buy_what2[3],buy_what2[4], buy_what2[5])
+                chat_id_neo, "Ada pesanan baru nih!\nDetail pesanan :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : {}\nChat : {}\nNo.Tele : +{}\nCatatan : {}"
+                .format(buy_what2[7],buy_what2[0],buy_what2[1],int(buy_what2[2]),buy_what2[3],msg.message.chat.username,buy_what2[4], buy_what2[5])
                     # ,reply_markup=markup_status(id_user)
                     ,parse_mode = "HTML"
                     
