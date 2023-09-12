@@ -310,7 +310,29 @@ def ulasan_user(query):
         sheet4.append_row([query.text])
         bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
         status_msg[query.chat.id] = "done"
-    elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
+    # elif query.chat.id in status_note and status_note[query.chat.id] == "waiting":
+    #     datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
+    #     waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
+    #     note = query.text.split("/nt ")
+    #     buy_what.append(note[1])
+    #     buy_what.append(waktu_umum)
+    #     buy_what.append(id_user)
+    #     buy_what.append(status[0])
+    #     print(buy_what)
+    #     bot.reply_to(query, "Ok, catatan telah ditambahkan")
+    #     bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
+    #     bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
+    #     status_note[query.chat.id] = "done"
+    # elif "/alm" not in query.text:
+    #     respon = [
+    #     "Maaf kami tidak dapat mengikuti instruksi ini.",
+    #     "Kami tidak melayani permintaan ini",
+    #     "Saya tidak tahu maksud Anda",
+    #     "Harap memberikan instruksi sesuai petunjuk ya"
+    #     ]
+    #     acak = random.randint(0, 3)
+    #     bot.reply_to(query, respon[acak])    
+    if query.chat.id in status_note and status_note[query.chat.id] == "waiting":
         datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
         waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
         note = query.text.split("/nt ")
@@ -323,16 +345,6 @@ def ulasan_user(query):
         bot.send_message(query.chat.id, "Detail pesanan Anda :\nId order : <b>{}</b>\nCustomer : <b>{}</b>\nPesanan :\n{}\nHarga : <b>Rp.{:,.2f}</b>\nAlamat : <b>{}</b>\nNo.Tele : {}\nCatatan : {}".format(buy_what[7],buy_what[0],buy_what[1],int(buy_what[2]),buy_what[3],buy_what[4], buy_what[5]), parse_mode="HTML")
         bot.send_message(query.chat.id, "Apakah sudah benar ?", reply_markup=markup_order())
         status_note[query.chat.id] = "done"
-    elif "/alm" not in query.text:
-        respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-        ]
-        acak = random.randint(0, 3)
-        bot.reply_to(query, respon[acak])    
-
 
 
 @bot.message_handler(commands=['cancel'])
