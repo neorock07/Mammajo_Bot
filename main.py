@@ -114,30 +114,19 @@ dt = sheet3.get_all_records()
 for i in dt:
     txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
     item2.append(str(indices))
-    indices += 1
     markup_promo.add(
-        InlineKeyboardButton(f"{indices}", callback_data="a"),
-    ) 
+        InlineKeyboardButton(f"{indices}", callback_data=f"pm_{indices}"),
+    )
+    indices += 1
+     
     
 
 @bot.callback_query_handler(func= lambda msg : msg.data == "promo" )
 def show_promo(msg):    
    
-    # pprint(dt)
-    # bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
-    
-    # markup = InlineKeyboardMarkup()
-    # markup.row_width = 1
-    # markup.add(
-    #     InlineKeyboardButton("A", callback_data="a"),
-    # )
-     
     if dt != []:
-        # for i in get_promo_msg()[0]:
-        #     get_promo_msg()
         bot.send_message(msg.message.chat.id, f"<b>Daftar Promo Hari ini</b>\n{txt_promo}", parse_mode="HTML")            
         bot.send_message(msg.message.chat.id,"Silahkan klik tombol dibawah untuk memilih promo!", reply_markup=markup_promo)
-        # bot.send_message(msg.message.chat.id,"iki lo coeg", reply_markup=markup)    
     else:
         bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
 
