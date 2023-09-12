@@ -99,23 +99,23 @@ def show_promo(msg):
     txt_promo = ''
     dt = sheet3.get_all_records()
     # pprint(dt)
-    bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
+    # bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
     
-    # markup = InlineKeyboardMarkup()
-    # markup.row_width = 3
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 3
      
-    # if dt != []:
-    #     for i in dt:
-    #         txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
-    #         item.append(str(indices))
-    #         markup.add(
-    #             InlineKeyboardButton(f"{i+1}", callback_data=f"pm_{i+1}"),       
-    #         )
-    #         indices += 1
-    #         bot.send_message(msg.message.chat.id, f"<b>Daftar Promo Hari ini</b>\n{txt_promo}", parse_mode="HTML")            
-    #     bot.send_message(msg.message.chat.id,"Silahkan klik tombol dibawah untuk memilih promo!", reply_markup=markup)    
-    # else:
-    #     bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
+    if dt != []:
+        for i in dt:
+            txt_promo += str(indices) + ". " + i['Promo'] + " \t\t\t| " +"Rp." +str( "{:,.2f}".format(i["Harga"])) + "\n"     
+            item.append(str(indices))
+            markup.add(
+                InlineKeyboardButton("A", callback_data="a"),       
+            )
+            indices += 1
+            bot.send_message(msg.message.chat.id, f"<b>Daftar Promo Hari ini</b>\n{txt_promo}", parse_mode="HTML")            
+        bot.send_message(msg.message.chat.id,"Silahkan klik tombol dibawah untuk memilih promo!", reply_markup=markup)    
+    else:
+        bot.send_message(msg.message.chat.id, "Nampaknya belum ada promo, nantikan promo yang akan datang ya!")        
 
 
 
