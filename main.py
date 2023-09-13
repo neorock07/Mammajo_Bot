@@ -332,16 +332,6 @@ def ulasan_user(query):
         sheet4.append_row([query.text])
         bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
         status_msg[query.chat.id] = "done"
-    
-    if ["/alm", "/cancel"] not in query.text and status_note[query.chat.id] == "done" and status_msg[query.chat.id] == "done" :
-        respon = [
-        "Maaf kami tidak dapat mengikuti instruksi ini.",
-        "Kami tidak melayani permintaan ini",
-        "Saya tidak tahu maksud Anda",
-        "Harap memberikan instruksi sesuai petunjuk ya"
-        ]
-        acak = random.randint(0, 3)
-        bot.reply_to(query, respon[acak])
             
     if query.chat.id in status_note and status_note[query.chat.id] == "waiting":
         datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
