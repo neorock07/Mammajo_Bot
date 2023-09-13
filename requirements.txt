@@ -1,4 +1,4 @@
-asttokens==2.2.1
+asokens==2.2.1
 backcall==0.2.0
 blinker==1.6.2
 cachecontrol==0.13.1
