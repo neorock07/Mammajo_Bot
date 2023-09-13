@@ -20,8 +20,10 @@ sheet = ''
 sheet2 = ''
 sheet3 = ''
 sheet4 = ''
+#checking status of each state
 status_msg = {}
 status_note = {}
+status_order = {}
 
 def connect_spreadsheet():
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
@@ -331,7 +333,7 @@ def ulasan_user(query):
         bot.reply_to(query, "Ok, ulasan diterima, Terima kasih atas ulasannya\nSemoga hari mu menyenangkan ya!")
         status_msg[query.chat.id] = "done"
     
-    if "/alm" not in query.text and status_note[query.chat.id] == "done" and status_msg[query.chat.id] == "done" :
+    if ["/alm", "/cancel"] not in query.text and status_note[query.chat.id] == "done" and status_msg[query.chat.id] == "done" :
         respon = [
         "Maaf kami tidak dapat mengikuti instruksi ini.",
         "Kami tidak melayani permintaan ini",
@@ -345,6 +347,8 @@ def ulasan_user(query):
         datetime_utc = datetime.datetime.utcfromtimestamp(query.date)
         waktu_umum = datetime_utc.strftime('%d/%m/%Y %H:%M:%S')
         catatan = query.text
+        status_order[query.chat.id] = "waiting"
+        
         if buy_what != []:
             buy_what.append(catatan)
             buy_what.append(waktu_umum)
@@ -372,12 +376,12 @@ def cancel_operation(msg):
     buy_what.clear()
     buy_what2.clear()
 
-status_order = {}
 
 @bot.callback_query_handler(func= lambda msg: msg.data in ["ok", "ulangi"])
 def response_order(msg):
     if msg.data == "ok":
-        status_order[msg.message.chat.id] = "ok"
+        #ubah status ke done
+        status_order[msg.message.chat.id] = "done"
         sheet2.append_row(buy_what) if buy_what != [] else sheet2.append_row(buy_what2)
         
         if buy_what != []:
@@ -406,12 +410,12 @@ def response_order(msg):
         buy_what.clear()
         buy_what2.clear()
     elif msg.data == "ulangi":
-        if msg.message.chat.id in status_order and status_order[msg.message.chat.id] == "ok":
-            bot.send_message(msg.message.chat.id, "Maaf pesanan tidak dapat dibatalkan\nSilahkan konfirmasi ke @NeoYuli untuk membatalkan pesanan")    
-        else:
+        if msg.message.chat.id in status_order and status_order[msg.message.chat.id] == "waiting":
+            bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")            
+        elif msg.message.chat.id in status_order and status_order[msg.message.chat.id] == "done":
         # sheet2.append_row(buy_what)
-            bot.send_message(msg.message.chat.id, "Baik kalau begitu silahkan ketik /start untuk mengulangi permintaan")
-        status_order[msg.message.chat.id] = "sudah"    
+            bot.send_message(msg.message.chat.id, "Maaf pesanan tidak dapat dibatalkan\nSilahkan konfirmasi ke @NeoYuli untuk membatalkan pesanan")    
+    
         buy_what.clear()
         buy_what2.clear()    
 
